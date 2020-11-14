@@ -1,0 +1,24 @@
+[package]
+name = "statest"
+version = "0.1.0"
+authors = ["doraneko94 <shuntaro94@gmail.com>"]
+edition = "2018"
+
+description   = "Rust crate for statistical test."
+documentation = "https://docs.rs/statest/"
+repository    = "https://github.com/doraneko94/statest"
+keywords      = ["statistics", "statistical test", "science"]
+license       = "MIT"
+readme        = "README.md"
+categories    = ["algorithms", "science"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+statrs = "0.13.0"
+num-traits = "0.2.12"
+ndarray = "0.13.1"
+
+[dev-dependencies]
+rand = "0.7.3"
+rand_distr = "0.3.0"
