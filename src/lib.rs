@@ -32,5 +32,6 @@
 
 pub mod cast;
 pub mod ks;
+pub mod normal;
 pub mod numerical;
 pub mod ttest;
