@@ -1,5 +1,11 @@
 //! # statest
 //! Rust crate for statistical tests.
+//! 
+//! Now
+//! - T test
+//! - Kolmogorov–Smirnov test
+//! - Chi2 test
+//! is available.
 //!
 //! ## usage
 //! ### T test
