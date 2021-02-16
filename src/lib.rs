@@ -31,6 +31,7 @@
 //! ```
 
 pub mod cast;
+pub mod chi2;
 pub mod ks;
 pub mod normal;
 pub mod numerical;

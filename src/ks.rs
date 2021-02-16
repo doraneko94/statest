@@ -13,32 +13,72 @@ const EPS1:f64 = 1.0e-3;
 /// Small value 2.
 const EPS2:f64 = 1.0e-8;
 
+/// Struct for Kolmogorov–Smirnov test.
+pub struct KSTest {
+    pub n: usize,
+    x: Vec<f64>,
+}
+
+impl KSTest {
+    pub fn new(x: &[f64]) -> Self {
+        let n = x.len();
+        let mut x = x.to_vec();
+        x.sort_by(|&a, b| a.partial_cmp(b).unwrap());
+        Self { n, x }
+    }
+
+    /// Kolmogorov–Smirnov test which returns probability `prob` and test statistic D `d`. 
+    pub fn ks1<T: Univariate<f64, f64>>(&self, dist: &T) -> (f64, f64) {
+        let mut d = 0.0;
+        let mut f_old = 0.0;
+
+        for (i, &xi) in self.x.iter().enumerate() {
+            let f_new = (i + 1) as f64 / self.n as f64;
+            let f_dist = dist.cdf(xi);
+            let (df_old, df_new) = ((f_old - f_dist).abs(), (f_new - f_dist).abs());
+            let dt = if df_old > df_new {
+                df_old
+            } else {
+                df_new
+            };
+            if dt > d {
+                d = dt;
+            }
+            f_old = f_new;
+        }
+        let n_sqrt = (self.n as f64).sqrt();
+        let prob = q_ks((n_sqrt + 0.12 + 0.11 / n_sqrt) * d);
+        (prob, d)
+    }
+}
+
 /// Trait for Kolmogorov–Smirnov test.
-pub trait KS<T: Float> {
+pub trait KSVec<T: Float> {
     /// Kolmogorov–Smirnov test. If `p` <= `prob`, then returns `true`.
     fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: T) -> bool;
 }
 
-impl KS<f64> for Vec<f64> {
+impl KSVec<f64> for Vec<f64> {
     fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: f64) -> bool {
-        let (prob, _) = ks1(&self, dist);
+        let ks = KSTest::new(&self);
+        let (prob, _) = ks.ks1(dist);
         prob >= p
     }
 }
 
-impl KS<f32> for Vec<f32> {
+impl KSVec<f32> for Vec<f32> {
     fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: f32) -> bool {
         self.to_vec_f64().ks1(dist, p as f64)
     }
 }
 
-impl<U: Data<Elem = f64>> KS<f64> for ArrayBase<U, Ix1> {
+impl<U: Data<Elem = f64>> KSVec<f64> for ArrayBase<U, Ix1> {
     fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: f64) -> bool {
         self.to_vec().ks1(dist, p)
     }
 }
 
-impl<U: Data<Elem = f32>> KS<f32> for ArrayBase<U, Ix1> {
+impl<U: Data<Elem = f32>> KSVec<f32> for ArrayBase<U, Ix1> {
     fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: f32) -> bool {
         self.to_vec().ks1(dist, p)
     }
@@ -61,34 +101,4 @@ fn q_ks(lambda: f64) -> f64 {
         term_old = term.abs();
     }
     1.0
-}
-
-/// Kolmogorov–Smirnov test which returns probability `prob` and test statistic D `d`. 
-pub fn ks1<T>(x: &[f64], dist: &T) -> (f64, f64)
-where
-    T: Univariate<f64, f64>,
-{
-    let mut x = x.to_vec();
-    x.sort_by(|&a, b| a.partial_cmp(b).unwrap());
-    let n = x.len();
-    let mut d = 0.0;
-    let mut f_old = 0.0;
-
-    for i in 0..n {
-        let f_new = (i + 1) as f64 / n as f64;
-        let f_dist = dist.cdf(x[i]);
-        let (df_old, df_new) = ((f_old - f_dist).abs(), (f_new - f_dist).abs());
-        let dt = if df_old > df_new {
-            df_old
-        } else {
-            df_new
-        };
-        if dt > d {
-            d = dt;
-        }
-        f_old = f_new;
-    }
-    let n_sqrt = (n as f64).sqrt();
-    let prob = q_ks((n_sqrt + 0.12 + 0.11 / n_sqrt) * d);
-    (prob, d)
 }
