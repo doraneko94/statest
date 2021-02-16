@@ -5,6 +5,7 @@
 //! - T test
 //! - Kolmogorov–Smirnov test
 //! - Chi2 test
+//! 
 //! is available.
 //!
 //! ## usage
