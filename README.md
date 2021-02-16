@@ -1,6 +1,9 @@
 # statest
 Rust crate for statistical tests.
 
+[![Crate](http://meritbadge.herokuapp.com/statest)](https://crates.io/crates/statest)
+[![docs.rs](https://docs.rs/statest/badge.svg)](https://docs.rs/statest)
+
 Now
 - T test
 - Kolmogorov–Smirnov test
