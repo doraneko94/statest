@@ -1,6 +1,6 @@
 [package]
 name = "statest"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["doraneko94 <shuntaro94@gmail.com>"]
 edition = "2018"
 
