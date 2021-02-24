@@ -3,10 +3,9 @@
 use ndarray::*;
 use num_traits::Float;
 use statrs::statistics::Statistics;
-use statrs::distribution::StudentsT;
+use statrs::distribution::{StudentsT, Univariate};
 
 use crate::cast::*;
-use crate::numerical::newton;
 
 /// One or Two sided test.
 pub enum Side {
@@ -41,7 +40,8 @@ impl TTest {
 
     pub fn ttest1(&self, y: f64) -> f64 {
         let t = (y - self.mean) / (self.variance / self.n as f64).sqrt();
-        newton(&self.tdist, t, 0.0, 1e-7)
+        self.tdist.cdf(t)
+        // newton(&self.tdist, t, 0.0, 1e-7)
     }
 }
 
