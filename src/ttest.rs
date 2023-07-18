@@ -2,8 +2,8 @@
 
 use ndarray::*;
 use num_traits::Float;
+use statrs::distribution::{ContinuousCDF, StudentsT};
 use statrs::statistics::Statistics;
-use statrs::distribution::{StudentsT, Univariate};
 
 use crate::cast::*;
 

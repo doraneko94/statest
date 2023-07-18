@@ -1,6 +1,6 @@
 use ndarray::*;
 use num_traits::Float;
-use statrs::distribution::{ChiSquared, Univariate};
+use statrs::distribution::{ChiSquared, ContinuousCDF};
 
 use crate::cast::*;
 

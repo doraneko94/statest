@@ -2,7 +2,7 @@
 
 use ndarray::*;
 use num_traits::Float;
-use statrs::distribution::Univariate;
+use statrs::distribution::ContinuousCDF;
 
 use crate::cast::*;
 
@@ -28,7 +28,7 @@ impl KSTest {
     }
 
     /// Kolmogorov–Smirnov test which returns probability `prob` and test statistic D `d`. 
-    pub fn ks1<T: Univariate<f64, f64>>(&self, dist: &T) -> (f64, f64) {
+    pub fn ks1<T: ContinuousCDF<f64, f64>>(&self, dist: &T) -> (f64, f64) {
         let mut d = 0.0;
         let mut f_old = 0.0;
 
@@ -55,11 +55,11 @@ impl KSTest {
 /// Trait for Kolmogorov–Smirnov test.
 pub trait KSVec<T: Float> {
     /// Kolmogorov–Smirnov test. If `p` <= `prob`, then returns `true`.
-    fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: T) -> bool;
+    fn ks1<S: ContinuousCDF<f64, f64>>(&self, dist: &S, p: T) -> bool;
 }
 
 impl KSVec<f64> for Vec<f64> {
-    fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: f64) -> bool {
+    fn ks1<S: ContinuousCDF<f64, f64>>(&self, dist: &S, p: f64) -> bool {
         let ks = KSTest::new(&self);
         let (prob, _) = ks.ks1(dist);
         prob >= p
@@ -67,19 +67,19 @@ impl KSVec<f64> for Vec<f64> {
 }
 
 impl KSVec<f32> for Vec<f32> {
-    fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: f32) -> bool {
+    fn ks1<S: ContinuousCDF<f64, f64>>(&self, dist: &S, p: f32) -> bool {
         self.to_vec_f64().ks1(dist, p as f64)
     }
 }
 
 impl<U: Data<Elem = f64>> KSVec<f64> for ArrayBase<U, Ix1> {
-    fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: f64) -> bool {
+    fn ks1<S: ContinuousCDF<f64, f64>>(&self, dist: &S, p: f64) -> bool {
         self.to_vec().ks1(dist, p)
     }
 }
 
 impl<U: Data<Elem = f32>> KSVec<f32> for ArrayBase<U, Ix1> {
-    fn ks1<S: Univariate<f64, f64>>(&self, dist: &S, p: f32) -> bool {
+    fn ks1<S: ContinuousCDF<f64, f64>>(&self, dist: &S, p: f32) -> bool {
         self.to_vec().ks1(dist, p)
     }
 }
