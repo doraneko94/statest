@@ -65,7 +65,7 @@ impl Chi2Indep {
             .and(&self.cross)
             .and(&self.xi.broadcast((self.c, self.r)).unwrap().t())
             .and(&self.xj.broadcast((self.r, self.c)).unwrap())
-            .apply(|a, &b, &c, &d| {
+            .for_each(|a, &b, &c, &d| {
                 let ijn = (c * d) as f64 / self.n as f64;
                 let nume = b as f64 - ijn;
                 *a = nume * nume / ijn;
