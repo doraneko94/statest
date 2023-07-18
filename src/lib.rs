@@ -25,7 +25,7 @@
 //! ```rust
 //! use rand_distr::{StudentT, Distribution};
 //! use statest::ks::*;
-//! use statrs::distribution::{StudentsT, Exponential, Normal};
+//! use statrs::distribution::{StudentsT, Exp, Normal};
 //! 
 //! fn main() {
 //!     let t = StudentT::new(1.0).unwrap();
@@ -33,7 +33,7 @@
 //!                          .collect::<Vec<f64>>();
 //!     let tdist = StudentsT::new(0.0, 1.0, 1.0).unwrap();
 //!     let ndist = Normal::new(0.0, 1.0).unwrap();
-//!     let edist = Exponential::new(1.0).unwrap();
+//!     let edist = Exp::new(1.0).unwrap();
 //!     println!("StudentT? {}", t_vec.ks1(&tdist, 0.05)); // true
 //!     println!("Normal? {}", t_vec.ks1(&ndist, 0.05)); // false
 //!     println!("Exponential? {}", t_vec.ks1(&edist, 0.05)); // false

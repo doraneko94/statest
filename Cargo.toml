@@ -15,10 +15,10 @@ categories    = ["algorithms", "science"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-statrs = "0.13.0"
+statrs = "0.16.0"
 num-traits = "0.2.12"
-ndarray = "0.13.1"
+ndarray = "0.15.6"
 
 [dev-dependencies]
-rand = "0.7.3"
-rand_distr = "0.3.0"
+rand = "0.8.5"
+rand_distr = "0.4.3"
